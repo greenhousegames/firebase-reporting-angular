@@ -22,4 +22,8 @@ div.footer {
 
 div[ui-view] {
   min-height: calc(100% - 300px);
+
+  > div {
+    overflow-y: hidden;
+  }
 }

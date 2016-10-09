@@ -118,8 +118,8 @@ export default class HomeController {
   init() {
     this.authLoaded = true;
     this.initReportingService();
-    this.data.$watch(() => this.draw());
-    this.draw();
+    this.data.$watch(() => this.drawAll());
+    this.drawAll();
   }
 
   buttonClicked(button) {
@@ -137,6 +137,11 @@ export default class HomeController {
     });
   }
 
+  drawAll() {
+    this.drawMetrics();
+    this.drawCharts();
+  }
+
   drawMetrics() {
     this.reportingService.filter().sum('anyclicked').select(1).then((values) => {
       this.$timeout(() => this.totalClicks = values[0] || 0);
@@ -149,8 +154,7 @@ export default class HomeController {
     });
   }
 
-  draw() {
-    this.drawMetrics();
+  drawCharts() {
     this.drawPieChart();
     this.drawLineChart('minute');
     this.drawLineChart('hour');
