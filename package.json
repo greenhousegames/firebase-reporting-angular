@@ -1,0 +1,49 @@
+{
+  "name": "firebase--firebase-template",
+  "version": "0.0.0",
+  "scripts": {
+    "prestart": "npm run prebuild",
+    "start": "brunch watch --server",
+    "prebuild": "(rm -r public || true)",
+    "build": "brunch build",
+    "production": "brunch build --production",
+    "preversion": "(rm -r dist || true) && mkdir dist",
+    "version": "npm run production && cp -R public/ dist && git add -A dist",
+    "postversion": "git push && git push --tags && npm publish && firebase deploy"
+  },
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-base-apps": "^2.0.0",
+    "angular-dynamic-routing": "^1.0.1",
+    "angular-icons": "^1.0.0",
+    "angularfire": "^2.0.2",
+    "fastclick": "^1.0.6",
+    "firebase": "~3.3.0",
+    "firebase-reporting": "0.0.15"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.5.3",
+    "auto-reload-brunch": "^2.0.0",
+    "autoprefixer": "^6.4.1",
+    "babel-brunch": "~6.0.0",
+    "babel-preset-es2015": "~6.3.13",
+    "base-apps-router": "^1.2.0",
+    "brunch": "^2.4.0",
+    "clean-css-brunch": "^2.0.0",
+    "css-brunch": "^2.0.0",
+    "eslint": "^3.0.0",
+    "eslint-brunch": "^3.9.0",
+    "html-pages-brunch": "^2.0.0",
+    "jasmine-core": "^2.5.0",
+    "javascript-brunch": "^2.0.0",
+    "karma": "^1.2.0",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-spec-reporter": "0.0.26",
+    "mockfirebase": "^0.12.0",
+    "postcss-brunch": "^2.0.3",
+    "sass-brunch": "^1.8.10",
+    "uglify-js-brunch": "^2.0.0"
+  }
+}

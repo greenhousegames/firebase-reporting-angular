@@ -1,0 +1,25 @@
+@import "_settings";
+@import "node_modules/angular-base-apps/scss/base";
+
+div.header {
+  height: 200px;
+  background-color: $secondary-color;
+  margin-bottom: 20px;
+
+  > div {
+    padding-top: 40px;
+
+    h1, h4 {
+      color: white;
+    }
+  }
+}
+
+div.footer {
+  height: 100px;
+  background-color: $secondary-color;
+}
+
+div[ui-view] {
+  min-height: calc(100% - 300px);
+}
