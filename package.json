@@ -1,6 +1,6 @@
 {
   "name": "firebase-reporting-angular",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "prestart": "npm run prebuild",
     "start": "brunch watch --server",
