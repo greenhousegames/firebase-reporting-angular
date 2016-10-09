@@ -2,6 +2,7 @@
 import fs from 'fastclick';
 import angular from 'angular';
 import 'angular-base-apps';
+import 'angular-google-chart/ng-google-chart';
 
 // Firebase Configuration
 import firebase from 'firebase';
@@ -50,6 +51,9 @@ angular.module('application', [
 
   // base apps
   'base',
+
+  // google charts
+  'googlechart',
 
   // icons
   'angularIcons.openIconic',

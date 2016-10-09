@@ -38,4 +38,24 @@ controller: HomeController as home
       <h2 ng-show="home.lastClicked !== null">{{ home.lastClicked | date:'medium' }}</h2>
     </div>
   </div>
+  <div class="grid-block shrink wrap text-center">
+    <div class="grid-content small-12">
+      <h2><i>Charts</i></h2>
+    </div>
+    <div class="grid-content small-12 collapse noscroll">
+      <div google-chart chart="home.piechart" style="height:400px; width:100%;"></div>
+    </div>
+    <div class="grid-content small-12 large-6 collapse noscroll">
+      <div google-chart chart="home.linecharts.minute" style="height:400px; width:100%;"></div>
+    </div>
+    <div class="grid-content small-12 large-6 collapse noscroll">
+      <div google-chart chart="home.linecharts.hour" style="height:400px; width:100%;"></div>
+    </div>
+    <div class="grid-content small-12 large-6 collapse noscroll">
+      <div google-chart chart="home.linecharts.day" style="height:400px; width:100%;"></div>
+    </div>
+    <div class="grid-content small-12 large-6 collapse noscroll">
+      <div google-chart chart="home.linecharts.week" style="height:400px; width:100%;"></div>
+    </div>
+  </div>
 </div>

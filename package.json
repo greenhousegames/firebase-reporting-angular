@@ -15,6 +15,7 @@
     "angular": "^1.5.8",
     "angular-base-apps": "^2.0.0",
     "angular-dynamic-routing": "^1.0.1",
+    "angular-google-chart": "^0.1.0",
     "angular-icons": "^1.0.0",
     "angularfire": "^2.0.2",
     "fastclick": "^1.0.6",

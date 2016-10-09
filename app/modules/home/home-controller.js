@@ -2,34 +2,124 @@ import FirebaseReporting from 'firebase-reporting';
 import firebase from 'firebase';
 
 export default class HomeController {
-  constructor($firebaseRef, $firebaseAuth, $firebaseArray, $timeout, BaseAppsApi) {
+  constructor($firebaseRef, $firebaseAuth, $firebaseArray, $timeout, $q) {
     this.authService = $firebaseAuth(firebase.auth());
     this.$timeout = $timeout;
+    this.$q = $q;
     this.authLoaded = false;
     this.totalClicks = null;
     this.totalUsers = null;
     this.lastClicked = null;
     this.data = $firebaseArray($firebaseRef.default.child('data'));
-
-    const init = () => {
-      this.authLoaded = true;
-
-      this.reportingService = new FirebaseReporting({
-        firebase: $firebaseRef.default.child('reporting')
-      });
-      this.initReportingService();
-
-      BaseAppsApi.subscribe('resize', () => this.draw());
-      this.data.$watch(() => this.draw());
-
-      this.draw();
-    };
+    this.reportingService = new FirebaseReporting({
+      firebase: $firebaseRef.default.child('reporting')
+    });
 
     this.authService.$requireSignIn()
-      .then(() => init())
-      .catch(() => this.authService.$signInAnonymously().then(() => init()));
+      .then(() => this.init())
+      .catch(() => this.authService.$signInAnonymously().then(() => this.init()));
+
+    this.piechart = {
+      type: 'PieChart',
+      data: {
+        'cols': [
+          {label: 'Button', type: 'string'},
+          {label: 'Times Clicked', type: 'number'}
+        ],
+        'rows': []
+      },
+      options: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    };
+    this.linecharts = {};
+    this.linecharts.minute = {
+      type: 'LineChart',
+      data: {
+        'cols': [
+          {label: 'Time', type: 'date'},
+          {label: 'A', type: 'number'},
+          {label: 'B', type: 'number'},
+          {label: 'C', type: 'number'},
+          {label: 'D', type: 'number'}
+        ],
+        'rows': []
+      },
+      options: {
+        title: 'Clicked this Hour',
+        legend: {
+          position: 'bottom'
+        }
+      }
+    };
+    this.linecharts.hour = {
+      type: 'LineChart',
+      data: {
+        'cols': [
+          {label: 'Time', type: 'date'},
+          {label: 'A', type: 'number'},
+          {label: 'B', type: 'number'},
+          {label: 'C', type: 'number'},
+          {label: 'D', type: 'number'}
+        ],
+        'rows': []
+      },
+      options: {
+        title: 'Clicked Today',
+        legend: {
+          position: 'bottom'
+        }
+      }
+    };
+    this.linecharts.day = {
+      type: 'LineChart',
+      data: {
+        'cols': [
+          {label: 'Time', type: 'date'},
+          {label: 'A', type: 'number'},
+          {label: 'B', type: 'number'},
+          {label: 'C', type: 'number'},
+          {label: 'D', type: 'number'}
+        ],
+        'rows': []
+      },
+      options: {
+        title: 'Clicked this Month',
+        legend: {
+          position: 'bottom'
+        }
+      }
+    };
+    this.linecharts.week = {
+      type: 'LineChart',
+      data: {
+        'cols': [
+          {label: 'Time', type: 'date'},
+          {label: 'A', type: 'number'},
+          {label: 'B', type: 'number'},
+          {label: 'C', type: 'number'},
+          {label: 'D', type: 'number'}
+        ],
+        'rows': []
+      },
+      options: {
+        title: 'Clicked this Year',
+        legend: {
+          position: 'bottom'
+        }
+      }
+    };
 
     return this;
+  }
+
+  init() {
+    this.authLoaded = true;
+    this.initReportingService();
+    this.data.$watch(() => this.draw());
+    this.draw();
   }
 
   buttonClicked(button) {
@@ -47,7 +137,7 @@ export default class HomeController {
     });
   }
 
-  draw() {
+  drawMetrics() {
     this.reportingService.filter().sum('anyclicked').select(1).then((values) => {
       this.$timeout(() => this.totalClicks = values[0] || 0);
     });
@@ -56,6 +146,89 @@ export default class HomeController {
     });
     this.reportingService.filter().last('timestamp').select(1).then((values) => {
       this.$timeout(() => this.lastClicked = values[0] ? values[0] : null);
+    });
+  }
+
+  draw() {
+    this.drawMetrics();
+    this.drawPieChart();
+    this.drawLineChart('minute');
+    this.drawLineChart('hour');
+    this.drawLineChart('day');
+    this.drawLineChart('week');
+  }
+
+  drawPieChart() {
+    const aClickedQuery = this.reportingService.filter().sum('aclicked').value();
+    const bClickedQuery = this.reportingService.filter().sum('bclicked').value();
+    const cClickedQuery = this.reportingService.filter().sum('cclicked').value();
+    const dClickedQuery = this.reportingService.filter().sum('dclicked').value();
+
+    this.$q.all([aClickedQuery, bClickedQuery, cClickedQuery, dClickedQuery]).then((values) => {
+      this.$timeout(() => {
+        this.piechart.data.rows.splice(0, this.piechart.data.rows.length);
+        this.piechart.data.rows.push({ c: [{ v: 'A' }, {v: values[0] }] });
+        this.piechart.data.rows.push({ c: [{ v: 'B' }, {v: values[1] }] });
+        this.piechart.data.rows.push({ c: [{ v: 'C' }, {v: values[2] }] });
+        this.piechart.data.rows.push({ c: [{ v: 'D' }, {v: values[3] }] });
+      });
+    });
+  }
+
+  drawLineChart(during) {
+    const queryStartTime = new Date();
+    const queryEndTime = new Date();
+    queryStartTime.setMilliseconds(0);
+    queryStartTime.setSeconds(0);
+    queryStartTime.setMinutes(0);
+
+    switch (during) {
+      case 'minute':
+        queryEndTime.setTime(queryStartTime.getTime());
+        queryEndTime.setHours(queryStartTime.getHours() + 1);
+        break;
+      case 'hour':
+        queryStartTime.setHours(0);
+        queryEndTime.setTime(queryStartTime.getTime());
+        queryEndTime.setDate(queryStartTime.getDate() + 1);
+        break;
+      case 'day':
+        queryStartTime.setHours(0);
+        queryStartTime.setDate(1);
+        queryEndTime.setTime(queryStartTime.getTime());
+        queryEndTime.setMonth(queryStartTime.getMonth() + 1);
+        break;
+      case 'week':
+        queryStartTime.setHours(0);
+        queryStartTime.setDate(1);
+        queryStartTime.setMonth(1);
+        queryEndTime.setTime(queryStartTime.getTime());
+        queryEndTime.setFullYear(queryStartTime.getFullYear() + 1);
+        break;
+    }
+
+    const aClickedQuery = this.reportingService.filter().sum('aclicked').during(during).range(queryStartTime.getTime(), queryEndTime.getTime()).values(true);
+    const bClickedQuery = this.reportingService.filter().sum('bclicked').during(during).range(queryStartTime.getTime(), queryEndTime.getTime()).values(true);
+    const cClickedQuery = this.reportingService.filter().sum('cclicked').during(during).range(queryStartTime.getTime(), queryEndTime.getTime()).values(true);
+    const dClickedQuery = this.reportingService.filter().sum('dclicked').during(during).range(queryStartTime.getTime(), queryEndTime.getTime()).values(true);
+
+    this.$q.all([aClickedQuery, bClickedQuery, cClickedQuery, dClickedQuery]).then((values) => {
+      this.linecharts[during].data.rows.splice(0, this.linecharts[during].data.rows.length);
+      for (var i = 0; i < values[0].length; i++) {
+        this.linecharts[during].data.rows.push({
+          c: [{
+            v: new Date(values[0][i].timestamp)
+          }, {
+            v: values[0][i].value
+          }, {
+            v: values[1][i].value
+          }, {
+            v: values[2][i].value
+          }, {
+            v: values[3][i].value
+          }]
+        });
+      }
     });
   }
 
@@ -103,4 +276,4 @@ export default class HomeController {
   }
 }
 
-HomeController.$inject = ['$firebaseRef', '$firebaseAuth', '$firebaseArray', '$timeout', 'BaseAppsApi'];
+HomeController.$inject = ['$firebaseRef', '$firebaseAuth', '$firebaseArray', '$timeout', '$q'];
