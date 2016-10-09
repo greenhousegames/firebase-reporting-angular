@@ -1,5 +1,5 @@
 {
-  "name": "firebase--firebase-template",
+  "name": "firebase-reporting-angular",
   "version": "0.0.0",
   "scripts": {
     "prestart": "npm run prebuild",
