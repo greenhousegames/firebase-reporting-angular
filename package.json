@@ -46,5 +46,20 @@
     "postcss-brunch": "^2.0.3",
     "sass-brunch": "^1.8.10",
     "uglify-js-brunch": "^2.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soumak77/firebase-reporting-angular.git"
+  },
+  "author": "Brian Soumakian",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/soumak77/firebase-reporting-angular/issues"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
+  "homepage": "https://github.com/soumak77/firebase-reporting-angular#readme"
 }
