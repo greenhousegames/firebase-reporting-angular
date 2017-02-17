@@ -1,5 +1,5 @@
 {
-  "name": "firebase-reporting-angular",
+  "name": "@greenhousegames/firebase-reporting-angular",
   "version": "0.0.4",
   "scripts": {
     "prestart": "npm run prebuild",
@@ -12,7 +12,9 @@
     "postversion": "git push && git push --tags && npm publish && firebase deploy"
   },
   "dependencies": {
-    "angular": "^1.5.8",
+    "@greenhousegames/firebase-reporting": "~0.1.0",
+    "angular": "~1.5.8",
+    "angular-animate": "~1.5.9",
     "angular-base-apps": "^2.0.0",
     "angular-dynamic-routing": "^1.0.1",
     "angular-google-chart": "^0.1.0",
@@ -20,8 +22,7 @@
     "angular-ui-router": "~0.3.1",
     "angularfire": "^2.0.2",
     "fastclick": "^1.0.6",
-    "firebase": "~3.3.0",
-    "firebase-reporting": "~0.0.15"
+    "firebase": "^3.3.0"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.3",
@@ -50,17 +51,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soumak77/firebase-reporting-angular.git"
+    "url": "git+https://github.com/greenhousegames/firebase-reporting-angular.git"
   },
-  "author": "Brian Soumakian",
+  "author": "Greenhouse Games, LLC",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/soumak77/firebase-reporting-angular/issues"
+    "url": "https://github.com/greenhousegames/firebase-reporting-angular/issues"
   },
   "babel": {
     "presets": [
       "es2015"
     ]
   },
-  "homepage": "https://github.com/soumak77/firebase-reporting-angular#readme"
+  "homepage": "https://github.com/greenhousegames/firebase-reporting-angular#readme"
 }

@@ -1,4 +1,4 @@
-import FirebaseReporting from 'firebase-reporting';
+import FirebaseReporting from '@greenhousegames/firebase-reporting';
 import firebase from 'firebase';
 
 export default class HomeController {
@@ -150,7 +150,7 @@ export default class HomeController {
       this.$timeout(() => this.totalUsers = value || 0);
     });
     this.reportingService.filter().last('timestamp').select(1).then((values) => {
-      this.$timeout(() => this.lastClicked = values[0] ? values[0] : null);
+      this.$timeout(() => this.lastClicked = values[0] || null);
     });
   }
 

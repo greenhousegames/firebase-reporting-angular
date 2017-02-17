@@ -2,6 +2,12 @@ var fs = require('fs');
 var router = require('base-apps-router');
 
 module.exports = {
+  npm: {
+    globals: {
+      firebase: 'firebase'
+    }
+  },
+
   paths: {
     'public':   'public',
     'watched':  ['app']

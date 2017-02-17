@@ -6,7 +6,7 @@ import 'angular-google-chart/ng-google-chart';
 import 'angular-ui-router';
 
 // Firebase Configuration
-import firebase from 'firebase';
+import * as firebase from 'firebase';
 import 'angularfire';
 import firebaseconfig from './config/config-firebase';
 firebase.initializeApp(firebaseconfig);
