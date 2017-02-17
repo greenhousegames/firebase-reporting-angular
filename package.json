@@ -1,6 +1,6 @@
 {
   "name": "@greenhousegames/firebase-reporting-angular",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "scripts": {
     "prestart": "npm run prebuild",
     "start": "brunch watch --server",
